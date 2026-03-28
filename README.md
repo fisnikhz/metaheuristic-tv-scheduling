@@ -45,17 +45,28 @@ Përveç kufizimeve bazë kohore, problemi përfshin rregulla specifike për të
 
 Ky kombinim i eksplorimit **Beam Search** dhe heuristikave të avancuara **Lookahead** mundëson gjetjen e zgjidhjeve të cilësisë së lartë në mënyrë efikase.
 
+## Optimizuesi Simulated Annealing
+
+Për të përmirësuar më tej orarin, ne kemi implementuar një metaheuristikë **Simulated Annealing (SA)**. Ky optimizim ekzekutohet **mbi zgjidhjen fillestare të gjeneruar nga inicializimi me Beam Search**, duke e përdorur atë si një pikënisje të fortë në vend që të fillojë nga e para.
+
+**Metodologjia:**
+
+1.  **Zgjidhja Fillestare:** Algoritmi fillon me orarin e plotë dhe të vlefshëm të gjeneruar nga faza e Beam Search.
+2.  **Operatorët e Fqinjësisë (Neighborhood):** SA eksploron hapësirën e zgjidhjeve në mënyrë të përsëritur duke përdorur operatorë të shumtë të perturbimit (p.sh., heqja e blloqeve të programeve të planifikuara, ndërrimi i kanaleve).
+3.  **Strategjia e Rikonstruktimit:** Pasi një zgjidhje të jetë ngacmuar (perturbuar), përdoret një mekanizëm i lokalizuar rikonstruktimi për të mbushur hapësirat e lira me programe me vlerë më të lartë, duke ruajtur në të njëjtën kohë të gjitha kufizimet strikte.
+4.  **Skeda Adaptive e Ftohjes:** Algoritmi pranon zgjidhjet që përmirësojnë, si dhe ato që përkeqësojnë gjendjen, bazuar në kriterin e Metropolis për t'i shpëtuar optimumeve lokale. Temperatura fillestare dhe shpejtësia e ftohjes përshtaten në mënyrë dinamike me madhësisë e problemit.
+
 ## Ekzekutimi i Projektit
 
-Për të ekzekutuar projektin dhe për të gjeneruar orarin optimal, ndiqni hapat e mëposhtëm:
+Për të ekzekutuar algoritmin me Simulated Annealing, përdorni argumentin `--input` duke specifikuar fajllin hyrës:
 
-1.  Sigurohuni që keni të instaluar Python 3.
-2.  Hapni terminalin në direktorinë kryesore të projektit.
-3.  Ekzekutoni komandën:
-    ```bash
-    python3 main.py
-    ```
-4.  Do t'ju shfaqet një listë e fajllave hyrës (input) të disponueshëm (p.sh., `usa_tv_input.json`, `uk_tv_input.json`, etj.).
-5.  Shkruani numrin e indeksit që korrespondon me fajllin që dëshironi të procesoni dhe shtypni Enter.
+```bash
+python main.py --input data/input/australia.json
+```
 
-Algoritmi do të fillojë ekzekutimin dhe në fund do të ruajë rezultatin në folderin `data/output/`.
+Mund të specifikoni numrin e iterimeve për SA (default është 5000):
+```bash
+python main.py --input data/input/australia.json --iterations 10000
+```
+
+Algoritmi do të fillojë ekzekutimin (fillimisht me Beam Search pastaj me SA) dhe në fund do të ruajë rezultatin në folderin `data/output/`.
